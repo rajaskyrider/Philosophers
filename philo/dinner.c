@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:44:42 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/25 22:41:21 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:13:51 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	dinner(t_table *table, pthread_mutex_t	*fork)
 	int			i;
 
 	i = 0;
-	if (pthread_create(&waiter, NULL, &monitor, table->philo) != 0)
+	if (pthread_create(&waiter, NULL, &monitor, table) != 0)
 		return (destroy_mutex(table, fork, table->philo[0].count), FALSE);
 	while(i < table->philo[0].count)
 	{
-		if (pthread_create(&table->philo[i].thread, NULL, &routine) != 0)
+		if (pthread_create(&table->philo[i].thread, NULL, &routine, table) != 0)
 			return (destroy_mutex(table, fork, table->philo[0].count), FALSE);
 		i++;
 	}

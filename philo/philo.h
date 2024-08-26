@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/25 22:41:42 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:13:37 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <stdlib.h>
+# include <sys/time.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -26,11 +27,14 @@ typedef struct s_ph
 {
 	pthread_t		thread;
 	int				id;
+	int				eating;
 	int				count;
+	int				ate;
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			dine_count;
+	size_t			last_meal;
 	int				*dead_flag;
 	int				*error_flag;
 	pthread_mutex_t	*rfork;
@@ -58,5 +62,7 @@ int		init(t_table *table, t_ph *philo, pthread_mutex_t *fork, char **argv);
 void	destroy_mutex(t_table *table, pthread_mutex_t *fork, int count);
 int		dinner(t_table *table, pthread_mutex_t	*fork);
 void	*monitor(void *ptr);
+void	*routine(void *ptr);
+size_t	get_current_time(t_ph *philo);
 
 #endif
