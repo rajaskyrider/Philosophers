@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/09 15:30:31 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:41:42 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,45 @@
 # include <pthread.h>
 # include <stdlib.h>
 
-# define TRUE 0
-# define FALSE 1
+# define TRUE 1
+# define FALSE 0
 # define PHILO_MAX 200
 
 typedef struct s_ph
 {
 	pthread_t		thread;
 	int				id;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				dine_count;
+	int				count;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	size_t			dine_count;
 	int				*dead_flag;
+	int				*error_flag;
 	pthread_mutex_t	*rfork;
 	pthread_mutex_t	*lfork;
+	pthread_mutex_t	*dead_lock;
+	pthread_mutex_t	*error_lock;
 	pthread_mutex_t	*write_lock;
-
+	pthread_mutex_t	*meal_lock;
 }	t_ph;
 
-int	check_input(int argc, char **argv);
+typedef struct s_table
+{
+	int				dead_flag;
+	int				error_flag;
+	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	error_lock;
+	pthread_mutex_t	write_lock;
+	pthread_mutex_t	meal_lock;
+	t_ph			*philo;
+}	t_table;
+
+int		check_input(int argc, char **argv);
+int		ft_atoi(const char *nptr);
+int		init(t_table *table, t_ph *philo, pthread_mutex_t *fork, char **argv);
+void	destroy_mutex(t_table *table, pthread_mutex_t *fork, int count);
+int		dinner(t_table *table, pthread_mutex_t	*fork);
+void	*monitor(void *ptr);
 
 #endif
