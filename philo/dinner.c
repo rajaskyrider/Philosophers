@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:44:42 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/26 11:13:51 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:59:57 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	dinner(t_table *table, pthread_mutex_t	*fork)
 		return (destroy_mutex(table, fork, table->philo[0].count), FALSE);
 	while(i < table->philo[0].count)
 	{
-		if (pthread_create(&table->philo[i].thread, NULL, &routine, table) != 0)
+		if (pthread_create(&table->philo[i].thread, NULL, &routine, &table->philo[i]) != 0)
 			return (destroy_mutex(table, fork, table->philo[0].count), FALSE);
 		i++;
 	}

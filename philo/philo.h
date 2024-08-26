@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/26 11:13:37 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:26:17 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,7 @@ int		dinner(t_table *table, pthread_mutex_t	*fork);
 void	*monitor(void *ptr);
 void	*routine(void *ptr);
 size_t	get_current_time(t_ph *philo);
+int		ft_usleep(size_t ms, t_ph *philo);
+void	print_status(int id, char *str, t_ph *philo);
 
 #endif
