@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:27:01 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 11:21:55 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 15:47:08 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 
 int	starvation(t_ph *philo, int i)
 {
-	int	result;
+	int		result;
+	size_t	time;
 
 	result = FALSE;
 	pthread_mutex_lock(philo[i].meal_lock);
-	if ((get_current_time(philo) - philo[i].last_meal) > philo[i].time_to_die)
+	time = get_current_time(philo);
+	//dprintf(2, "Time here %zu and %zu \n", time - philo[i].start_time, philo[i].time_to_die);
+	if ((get_current_time(philo) - philo[i].last_meal) >= philo[i].time_to_die)
+	{
 		result = TRUE;
+		dprintf(2, "Dead at %zu\n", time - philo[i].start_time);
+	}
 	pthread_mutex_unlock(philo[i].meal_lock);
 	return (result);
 }
@@ -90,8 +96,7 @@ void	*monitor(void *ptr)
 	table = (t_table *)ptr;
 	while (TRUE)
 	{
-		if (check_health(table->philo) == FALSE || check_meal(table->philo) == TRUE \
-			|| check_error(table) == TRUE)
+		if (check_health(table->philo) == FALSE || check_meal(table->philo) == TRUE)
 			break;
 	}
 	return (ptr);

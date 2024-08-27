@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:42:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 11:25:35 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 15:05:59 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,17 @@ int	ft_usleep(size_t ms, t_ph *philo)
 	start = get_current_time(philo);
 	end = start + ms;
 	while (get_current_time(philo) < end)
-		usleep(500);
+		usleep(100);
 	return (TRUE);
 }
 
 void	print_status(int id, char *str, t_ph *philo)
 {
+	size_t	time;
+
+	time = get_current_time(philo) - philo->start_time;
 	pthread_mutex_lock(philo->write_lock);
-	printf("%zu %d %s\n", get_current_time(philo), id, str);
+	if (check_dead(philo) == FALSE)
+		printf("%zu %d %s\n", time, id, str);
 	pthread_mutex_unlock(philo->write_lock);
 }

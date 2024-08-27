@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 14:31:27 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/26 10:46:04 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 15:28:32 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ int	init_philo(t_table *table, t_ph *philo, pthread_mutex_t *fork, char **argv)
 		philo[i].id = i + 1;
 		philo[i].eating = 0;
 		set_args(&philo[i], argv);
-		philo->last_meal = get_current_time(philo);
+		philo[i].start_time = get_current_time(philo);
+		philo[i].last_meal = get_current_time(philo);
 		philo[i].dead_flag = &table->dead_flag;
 		philo[i].error_flag = &table->error_flag;
 		if (i == 0)

@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 11:22:14 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:30:27 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_ph
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	long			dine_count;
+	size_t			start_time;
 	size_t			last_meal;
 	int				*dead_flag;
 	int				*error_flag;
@@ -65,6 +66,7 @@ void	*monitor(void *ptr);
 void	*routine(void *ptr);
 size_t	get_current_time(t_ph *philo);
 int		ft_usleep(size_t ms, t_ph *philo);
+int		check_dead(t_ph *philo);
 void	print_status(int id, char *str, t_ph *philo);
 
 #endif

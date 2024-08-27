@@ -6,14 +6,15 @@
 #    By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/08/27 11:19:55 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/08/27 15:16:12 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= philo
 CC			= cc
-CFLAG		= -Wall -Werror -Wextra -g
+CFLAG		= -Wall -Werror -Wextra  -pthread -g -O3
 RM 			= rm -rf
+#SANITIZER 	= -fsanitize=thread
 PHILO		= main.c check_input.c dinner.c init.c monitor.c routine.c \
 			  utils.c
 SRCS		= $(PHILO)
@@ -27,7 +28,7 @@ $(OBJDIR)/%.o: %.c
 	@$(CC) $(CFLAG) -c $< -o $@
 
 $(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(CFLAG) $(LIBFT) -pthread -o $(NAME)
+	@$(CC) $(OBJS) $(CFLAG) -o $(NAME) $(SANITIZER)
 
 clean:
 		@$(RM) $(OBJDIR) > /dev/null 2>&1
