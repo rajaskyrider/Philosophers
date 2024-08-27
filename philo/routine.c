@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 11:09:03 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/26 16:23:13 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:25:20 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_dead(t_ph *philo)
 
 	result = FALSE;
 	pthread_mutex_lock(philo->dead_lock);
-	if (philo->dead_flag == 1)
+	if (*philo->dead_flag == 1)
 		result = TRUE;
 	pthread_mutex_unlock(philo->dead_lock);
 	return (result);
@@ -29,7 +29,7 @@ void	think(t_ph *philo)
 	print_status(philo->id, "is thinking", philo);
 }
 
-void	sleep(t_ph *philo)
+void	sleepy(t_ph *philo)
 {
 	print_status(philo->id, "is sleeping", philo);
 	ft_usleep(philo->time_to_sleep, philo);
@@ -69,7 +69,7 @@ void	*routine(void *ptr)
 	while (check_dead(philo) == FALSE)
 	{
 		eat(philo);
-		sleep(philo);
+		sleepy(philo);
 		think(philo);
 	}
 	return (ptr);

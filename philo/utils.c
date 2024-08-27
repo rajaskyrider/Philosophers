@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:42:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/26 15:29:57 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:25:35 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ size_t	get_current_time(t_ph *philo)
 	if (gettimeofday(&time, NULL) == -1)
 	{
 		pthread_mutex_lock(philo->error_lock);
-		philo->error_flag = 1;
+		*philo->error_flag = 1;
 		pthread_mutex_unlock(philo->error_lock);
 		return (0);
 	}

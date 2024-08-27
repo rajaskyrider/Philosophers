@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:27:01 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/26 11:08:41 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:21:55 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_health(t_ph *philo)
 		{
 			print_status(philo[i].id, "died", philo);
 			pthread_mutex_lock(philo[i].dead_lock);
-			philo[i].dead_flag = 1;
+			*philo[i].dead_flag = 1;
 			pthread_mutex_unlock(philo[i].dead_lock);
 			return (FALSE);
 		}
@@ -64,7 +64,7 @@ int	check_meal(t_ph	*philo)
 	if (ate == philo[0].count)
 	{
 		pthread_mutex_lock(philo[0].dead_lock);
-		philo[0].dead_flag = 1;
+		*philo[0].dead_flag = 1;
 		pthread_mutex_unlock(philo[0].dead_lock);
 		return (TRUE);
 	}

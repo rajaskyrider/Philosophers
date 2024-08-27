@@ -6,7 +6,7 @@
 #    By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/08/09 13:48:45 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/08/27 11:19:55 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME		= philo
 CC			= cc
 CFLAG		= -Wall -Werror -Wextra -g
 RM 			= rm -rf
-PHILO		= main.c check_input.c
+PHILO		= main.c check_input.c dinner.c init.c monitor.c routine.c \
+			  utils.c
 SRCS		= $(PHILO)
 OBJDIR      = objs
 OBJS		= $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
