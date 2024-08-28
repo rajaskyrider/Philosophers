@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 14:31:27 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 15:28:32 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:43:15 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	init_table(t_table *table, t_ph *philo)
 	return (TRUE);
 }
 
-
 int	init_fork(pthread_mutex_t *fork, int count, t_table *table)
 {
 	int	i;
@@ -65,6 +64,8 @@ void	set_args(t_ph *philo, char **argv)
 	philo->dine_count = -1;
 	if (argv[5])
 		philo->dine_count = ft_atoi(argv[5]);
+	philo->start_time = get_current_time(philo);
+	philo->last_meal = get_current_time(philo);
 }
 
 int	init_philo(t_table *table, t_ph *philo, pthread_mutex_t *fork, char **argv)
@@ -79,14 +80,13 @@ int	init_philo(t_table *table, t_ph *philo, pthread_mutex_t *fork, char **argv)
 		philo[i].id = i + 1;
 		philo[i].eating = 0;
 		set_args(&philo[i], argv);
-		philo[i].start_time = get_current_time(philo);
-		philo[i].last_meal = get_current_time(philo);
 		philo[i].dead_flag = &table->dead_flag;
 		philo[i].error_flag = &table->error_flag;
 		if (i == 0)
 			philo[i].rfork = &fork[count - 1];
 		else
 			philo[i].rfork = &fork[i - 1];
+		philo[i].lfork = &fork[i];
 		philo[i].dead_lock = &table->dead_lock;
 		philo[i].error_lock = &table->error_lock;
 		philo[i].write_lock = &table->write_lock;

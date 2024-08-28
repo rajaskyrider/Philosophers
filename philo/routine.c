@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 11:09:03 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 15:45:56 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:44:42 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	sleepy(t_ph *philo)
 void	eat(t_ph *philo)
 {
 	pthread_mutex_lock(philo->rfork);
-	print_status(philo->id, "has taken the fork", philo);
+	print_status(philo->id, "has taken a fork", philo);
 	if (philo->count == 1)
 	{
 		ft_usleep(philo->time_to_die, philo);
@@ -46,7 +46,7 @@ void	eat(t_ph *philo)
 		return ;
 	}
 	pthread_mutex_lock(philo->lfork);
-	print_status(philo->id, "has taken the fork", philo);
+	print_status(philo->id, "has taken a fork", philo);
 	philo->eating = 1;
 	print_status(philo->id, "is eating", philo);
 	pthread_mutex_lock(philo->meal_lock);
@@ -61,7 +61,7 @@ void	eat(t_ph *philo)
 
 void	*routine(void *ptr)
 {
-	t_ph *philo;
+	t_ph	*philo;
 
 	philo = (t_ph *)ptr;
 	if (philo->id % 2 == 0)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+         #
+#    By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/08/27 15:16:12 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/08/28 12:27:16 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ all: $(NAME)
 
 $(OBJDIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAG) -c $< -o $@
+	@$(CC) $(CFLAG) $(SANITIZER) -c $< -o $@
 
 $(NAME): $(OBJS)
 	@$(CC) $(OBJS) $(CFLAG) -o $(NAME) $(SANITIZER)

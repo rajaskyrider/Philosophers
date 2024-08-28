@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:42:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 15:05:59 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:44:27 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	destroy_mutex(t_table *table, pthread_mutex_t *fork, int count)
 size_t	get_current_time(t_ph *philo)
 {
 	struct timeval	time;
-	
+
 	if (gettimeofday(&time, NULL) == -1)
 	{
 		pthread_mutex_lock(philo->error_lock);
@@ -46,7 +46,7 @@ int	ft_usleep(size_t ms, t_ph *philo)
 {
 	size_t	start;
 	size_t	end;
-	
+
 	start = get_current_time(philo);
 	end = start + ms;
 	while (get_current_time(philo) < end)
