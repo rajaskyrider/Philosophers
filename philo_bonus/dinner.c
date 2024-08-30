@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:44:42 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/29 16:09:46 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:14:42 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,5 @@ void	dinner(t_ph *philo, int count)
 	}
 	if (i == count)
 		i = 0;
-	dessert(pid, i, count);
+	//dessert(pid, i, count);
 }

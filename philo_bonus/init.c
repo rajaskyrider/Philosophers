@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 14:31:27 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/29 15:43:58 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:03:12 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,39 @@ void	set_args(t_ph *philo, char **argv)
 	philo->last_meal = get_current_time(philo);
 }
 
+void	init_sems(t_ph *philo)
+{
+	sem_t	*write_lock;
+	sem_t	*dine_lock;
+	sem_t	*dead_lock;
+
+	write_lock = sem_open("/write_lock", O_CREAT, 0644, 1);
+	dine_lock = sem_open("/dine_lock", O_CREAT, 0644, 0);
+	dead_lock = sem_open("/error_lock", O_CREAT, 0644, 0);
+	if (dine_lock == SEM_FAILED || write_lock == SEM_FAILED \
+		|| dead_lock == SEM_FAILED)
+		exit(1);
+	philo->write_lock = write_lock;
+	philo->dine_lock = dine_lock;
+	philo->dead_lock = dead_lock;
+}
+
 int	init_philo(t_ph *philo, pthread_mutex_t *fork, char **argv)
 {
 	int		i;
 	int		count;
-	sem_t	*write_lock;
-	sem_t	*dine_lock;
 
 	i = 0;
-	write_lock = sem_open("/write_lock", O_CREAT, 0644, 1);
-	dine_lock = sem_open("/dine_lock", O_CREAT, 0644, 0);
-	if (dine_lock == SEM_FAILED || write_lock == SEM_FAILED)
-		exit(1);
 	count = ft_atoi(argv[1]);
 	while (i < count)
 	{
 		philo[i].id = i + 1;
 		philo[i].eating = 0;
 		set_args(&philo[i], argv);
-		philo[i].dead_flag = 0;
 		philo[i].error_flag = 0;
-		philo[i].write_lock = write_lock;
-		philo[i].dine_lock = dine_lock;
+		init_sems(&philo[i]);
 		philo[i].forks = fork;
+		philo[i].must_die = 0;
 		i++;
 	}
 	return (TRUE);

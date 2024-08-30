@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/29 16:07:47 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:02:15 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@ typedef struct s_ph
 	long			dine_count;
 	size_t			start_time;
 	size_t			last_meal;
-	int				dead_flag;
 	int				error_flag;
-	sem_t			*write_lock;
 	sem_t			*forks;
+	sem_t			*write_lock;
 	sem_t			*dine_lock;
+	sem_t			*dead_lock;
+	int				must_die;
 }	t_ph;
+
+
 
 
 int		check_input(int argc, char **argv);
