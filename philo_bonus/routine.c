@@ -54,8 +54,11 @@ void	kill_check(t_ph *philo)
 	sem_post(philo->dead_lock);
 	sem_wait(philo->write_lock);
 	philo->must_die = 1;
+	while (philo->eating == 1)
+		usleep(10);
 	sem_post(philo->write_lock);
-	exit(philo->eating);
+	exit(EXIT_SUCCESS);
+
 }
 
 void	routine(t_ph *philo)
