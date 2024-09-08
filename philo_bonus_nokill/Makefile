@@ -6,7 +6,7 @@
 #    By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/09/08 15:22:00 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/09/07 00:12:59 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ NAME		= philo
 CC			= cc
 CFLAG		= -Wall -Werror -Wextra  -pthread -g -O3
 RM 			= rm -rf
-SANITIZER 	= -fsanitize=thread
-PHILO		= main.c check_input.c dinner.c init.c monitor.c routine.c \
-			  utils.c
+#SANITIZER 	= -fsanitize=thread
+PHILO		= main.c check_input.c dinner.c monitor.c routine.c \
+			  utils.c utils2.c
 SRCS		= $(PHILO)
 OBJDIR      = objs
 OBJS		= $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))

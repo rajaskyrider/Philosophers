@@ -3,20 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+         #
+#    By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/08/29 10:31:23 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/09/09 00:53:20 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= philo_bonus
+NAME		= philo
 CC			= cc
 CFLAG		= -Wall -Werror -Wextra  -pthread -g -O3
 RM 			= rm -rf
 #SANITIZER 	= -fsanitize=thread
-PHILO		= main.c check_input.c dinner.c init.c monitor.c routine.c \
-			  utils.c
+PHILO		= main.c utils.c init.c
 SRCS		= $(PHILO)
 OBJDIR      = objs
 OBJS		= $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))

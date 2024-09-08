@@ -3,46 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 12:42:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/30 16:48:44 by rpandipe         ###   ########.fr       */
+/*   Created: 2024/09/08 23:56:32 by rpandipe          #+#    #+#             */
+/*   Updated: 2024/09/09 01:07:15 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	get_current_time(t_ph *philo)
+void	ft_sem_close(t_ph *philo, int flag)
 {
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL) == -1)
-	{
-		sem_post(philo->dead_lock);
-		return (0);
-	}
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-int	ft_usleep(size_t ms, t_ph *philo)
-{
-	size_t	start;
-	size_t	end;
-
-	start = get_current_time(philo);
-	end = start + ms;
-	while (get_current_time(philo) < end)
-		usleep(100);
-	return (TRUE);
+	if (flag > 0)
+		sem_close(philo->forks);
+	if (flag > 1)
+		sem_close(philo->write_lock);
+	if (flag > 2)
+		sem_close(philo->dine_lock);
+	sem_unlink("/fork");
+	sem_unlink("/write_lock");
+	sem_unlink("/dine_lock");
 }
 
 void	print_status(int id, char *str, t_ph *philo)
 {
 	size_t	time;
 
-	time = get_current_time(philo) - philo->start_time;
+	time = get_current_time() - philo->start_time;
 	sem_wait(philo->write_lock);
-	if (philo->write_lock == 0)
+	if (!philo->stop)
 		printf("%zu %d %s\n", time, id, str);
 	sem_post(philo->write_lock);
+}
+
+void	print_error(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (*(str + i))
+		i++;
+	write(2, str, i);
+	write(2, "\n", 1);
+	exit(0);
+}
+
+size_t	get_current_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+void	ft_usleep(size_t ms, t_ph *philo)
+{
+	size_t	start;
+	size_t	end;
+
+	start = get_current_time();
+	end = start + ms;
+	while (!philo->stop)
+	{
+		if (get_current_time() > end)
+			break ;
+		usleep(500);
+	}
 }

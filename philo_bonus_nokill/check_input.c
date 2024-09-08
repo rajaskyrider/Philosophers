@@ -1,16 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 23:50:46 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/09 01:36:49 by rpandipe         ###   ########.fr       */
+/*   Created: 2024/08/09 13:39:48 by rpandipe          #+#    #+#             */
+/*   Updated: 2024/08/09 14:18:16 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+void	print_error(char *str)
+{
+	write(2, "Error\n", 6);
+	write(2, str, ft_strlen(str));
+	write(2, "\n", 2);
+}
+
+int	ft_atoi(const char *nptr)
+{
+	int	ans;
+	int	sign;
+	int	i;
+
+	ans = 0;
+	sign = 1;
+	i = 0;
+	while ((nptr[i] > 8 && nptr[i] < 14) || nptr[i] == 32)
+		i++;
+	if ((nptr[i] == '-' || nptr[i] == '+'))
+	{
+		if (nptr[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		ans = ans * 10 + (nptr[i] - '0');
+		i++;
+	}
+	return (sign * ans);
+}
 
 int	check_arg(char *arg)
 {
@@ -47,50 +89,4 @@ int	check_input(int argc, char **argv)
 			("number_of_times_each_philosopher_must_eat is invalid"), FALSE);
 	else
 		return (TRUE);
-}
-
-int	init_fork(t_ph *philo, int count)
-{
-	sem_unlink("/fork");
-	philo->forks = sem_open("/fork", O_CREAT | O_EXCL, S_IRWXU, count);
-	if (philo->forks == SEM_FAILED)
-		return (FALSE);
-	return (TRUE);
-}
-
-int	init_sems(t_ph *philo)
-{
-	sem_unlink("/write_lock");
-	sem_unlink("/dine_lock");
-	philo->write_lock = sem_open("/write_lock", O_CREAT | O_EXCL, S_IRWXU, 1);
-	if (philo->write_lock == SEM_FAILED)
-		return (ft_sem_close(philo, 1), FALSE);
-	philo->dine_lock = sem_open("/dine_lock", O_CREAT | O_EXCL, S_IRWXU, 0);
-	if (philo->dine_lock == SEM_FAILED)
-		return (ft_sem_close(philo, 2), FALSE);
-	return (TRUE);
-}
-
-t_ph	*init_philo(int argc, char **argv)
-{
-	t_ph	*philo;
-
-	philo = (t_ph *)malloc(sizeof(t_ph));
-	if (!philo)
-		print_error("Error: Failed to malloc philo");
-	if (!check_input(argc, argv))
-		exit(1);
-	philo->stop = 0;
-	philo->ate = 0;
-	philo->count = ft_atoi(argv[1]);
-	philo->time_to_die = ft_atoi(argv[2]);
-	philo->time_to_eat = ft_atoi(argv[3]);
-	philo->time_to_sleep = ft_atoi(argv[4]);
-	philo->dine_count = -1;
-	if (argv[5])
-		philo->dine_count = ft_atoi(argv[5]);
-	if (!init_fork(philo, ft_atoi(argv[1])) || !init_sems(philo))
-		return (FALSE);
-	philo->dead = 0;
-	return (philo);
 }
