@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 23:56:32 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/09 01:07:15 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/09 10:43:52 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,9 @@ void	ft_usleep(size_t ms, t_ph *philo)
 
 	start = get_current_time();
 	end = start + ms;
-	while (!philo->stop)
+	while (get_current_time() < end)
 	{
-		if (get_current_time() > end)
-			break ;
-		usleep(500);
+		check_monitor(philo);
+		usleep(100);
 	}
 }

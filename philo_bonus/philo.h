@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/09 01:37:30 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/09 10:26:06 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,17 @@ typedef struct s_ph
 	sem_t			*dine_lock;
 	int				dead;
 	pthread_t		monitor;
+	int				pid[PHILO_MAX];
 }	t_ph;
 
 t_ph	*init_philo(int argc, char **argv);
 int		ft_atoi(const char *nptr);
+void	check_monitor(t_ph	*philo);
 void	ft_sem_close(t_ph *philo, int flag);
 void	print_error(char *str);
 void	print_status(int id, char *str, t_ph *philo);
 void	ft_usleep(size_t ms, t_ph *philo);
 size_t	get_current_time(void);
+void	*meal_check(void *ptr);
 
 #endif
