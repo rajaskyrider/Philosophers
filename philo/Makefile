@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+         #
+#    By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/09/08 15:22:00 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/09/18 12:43:49 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME		= philo
 CC			= cc
 CFLAG		= -Wall -Werror -Wextra  -pthread -g -O3
 RM 			= rm -rf
-SANITIZER 	= -fsanitize=thread
+#SANITIZER 	= -fsanitize=thread
 PHILO		= main.c check_input.c dinner.c init.c monitor.c routine.c \
 			  utils.c
 SRCS		= $(PHILO)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:42:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/28 18:44:27 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:56:41 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,18 @@ void	print_status(int id, char *str, t_ph *philo)
 	if (check_dead(philo) == FALSE)
 		printf("%zu %d %s\n", time, id, str);
 	pthread_mutex_unlock(philo->write_lock);
+}
+
+void	set_order(pthread_mutex_t **f_fork, pthread_mutex_t **s_fork, t_ph *ph)
+{
+	if (ph->id % 2 == 0)
+	{
+		*f_fork = ph->rfork;
+		*s_fork = ph->lfork;
+	}
+	else
+	{
+		*f_fork = ph->lfork;
+		*s_fork = ph->rfork;
+	}
 }

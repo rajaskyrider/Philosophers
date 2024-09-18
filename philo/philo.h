@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/08/27 14:30:27 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:57:20 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ size_t	get_current_time(t_ph *philo);
 int		ft_usleep(size_t ms, t_ph *philo);
 int		check_dead(t_ph *philo);
 void	print_status(int id, char *str, t_ph *philo);
+void	set_order(pthread_mutex_t **f_fork, pthread_mutex_t **s_fork, t_ph *ph);
 
 #endif
