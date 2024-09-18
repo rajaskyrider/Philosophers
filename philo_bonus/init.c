@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 23:50:46 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/17 12:30:31 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 10:51:35 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	init_sems(t_ph *philo)
 	sem_unlink("/dine_lock");
 	sem_unlink("/max_eater");
 	philo->max_eater = sem_open("/max_eater", O_CREAT | O_EXCL, S_IRWXU, \
-							(philo->count - 1 ) + (philo->count == 1));
+							(philo->count - 1));
 	if (philo->max_eater == SEM_FAILED)
 		return (ft_sem_close(philo, 1), FALSE);
 	philo->write_lock = sem_open("/write_lock", O_CREAT | O_EXCL, S_IRWXU, 1);

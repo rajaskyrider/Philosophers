@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/17 12:53:52 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:29:00 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void	*meal_check(void *ptr)
 	printf("Starting to wait\n");
 	while (c < philo->count)
 	{
+		dprintf(2, "\033[32mWaiting for dine lock\n\033[0m\n");
 		sem_wait(philo->dine_lock);
-		printf("Thread %d: Recieved semaphore in monitor\n", c + 1);
+		dprintf(2, "\033[32mThread %d: Recieved dine lock in monitor\033[0m\n", c + 1);
 		c++;
 	}
 	while (++i < philo->count)
