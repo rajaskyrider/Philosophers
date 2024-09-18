@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:35 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/09 10:48:41 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:53:52 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,13 @@ void	*meal_check(void *ptr)
 	c = 0;
 	i = -1;
 	philo = (t_ph *)ptr;
+	if (philo->dine_count == -1)
+		return (ptr);
+	printf("Starting to wait\n");
 	while (c < philo->count)
 	{
 		sem_wait(philo->dine_lock);
+		printf("Thread %d: Recieved semaphore in monitor\n", c + 1);
 		c++;
 	}
 	while (++i < philo->count)

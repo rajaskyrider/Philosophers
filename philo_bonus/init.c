@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 23:50:46 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/09 01:36:49 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:30:31 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,22 @@ int	init_sems(t_ph *philo)
 {
 	sem_unlink("/write_lock");
 	sem_unlink("/dine_lock");
+	sem_unlink("/max_eater");
+	philo->max_eater = sem_open("/max_eater", O_CREAT | O_EXCL, S_IRWXU, \
+							(philo->count - 1 ) + (philo->count == 1));
+	if (philo->max_eater == SEM_FAILED)
+		return (ft_sem_close(philo, 1), FALSE);
 	philo->write_lock = sem_open("/write_lock", O_CREAT | O_EXCL, S_IRWXU, 1);
 	if (philo->write_lock == SEM_FAILED)
-		return (ft_sem_close(philo, 1), FALSE);
+		return (ft_sem_close(philo, 2), FALSE);
 	philo->dine_lock = sem_open("/dine_lock", O_CREAT | O_EXCL, S_IRWXU, 0);
 	if (philo->dine_lock == SEM_FAILED)
-		return (ft_sem_close(philo, 2), FALSE);
+		return (ft_sem_close(philo, 3), FALSE);
 	return (TRUE);
 }
 
-t_ph	*init_philo(int argc, char **argv)
+t_ph	*init_philo(int argc, char **argv, t_ph *philo)
 {
-	t_ph	*philo;
-
-	philo = (t_ph *)malloc(sizeof(t_ph));
-	if (!philo)
-		print_error("Error: Failed to malloc philo");
 	if (!check_input(argc, argv))
 		exit(1);
 	philo->stop = 0;

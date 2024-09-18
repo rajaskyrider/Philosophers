@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+        */
+/*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:50:00 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/09 11:00:07 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:46:45 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,34 @@ void	check_monitor(t_ph	*philo)
 
 void	dinner(t_ph *philo)
 {
-	if (philo->id % 2 == 1)
+	if (philo->id % 2 == 0)
 		usleep(1000);
 	while (TRUE)
 	{
 		print_status(philo->id, "is thinking", philo);
+		sem_wait(philo->max_eater);
 		sem_wait(philo->forks);
 		print_status(philo->id, "has taken a fork", philo);
 		if (philo->count == 1)
 		{
 			ft_usleep(philo->time_to_die, philo);
+			sem_post(philo->forks);
 			check_monitor(philo);
 		}
-		//check_monitor(philo);
+		check_monitor(philo);
 		sem_wait(philo->forks);
 		print_status(philo->id, "has taken a fork", philo);
 		print_status(philo->id, "is eating", philo);
-		ft_usleep(philo->time_to_eat, philo);
 		philo->last_meal = get_current_time();
+		ft_usleep(philo->time_to_eat, philo);
 		sem_post(philo->forks);
 		sem_post(philo->forks);
+		sem_post(philo->max_eater);
 		if (++(philo->ate) == philo->dine_count)
+		{
+			printf("Thread %d: posting to semaphore from dinner\n", philo->id);
 			sem_post(philo->dine_lock);
+		}
 		print_status(philo->id, "is sleeping", philo);
 		ft_usleep(philo->time_to_sleep, philo);
 	}
@@ -85,46 +91,52 @@ void	exit_philo(t_ph *philo, int	*pid)
 	int	status;
 
 	i = 0;
-	if (philo->dine_count != -1)
-		pthread_create(&philo->monitor, NULL, &meal_check, philo);
+	pthread_create(&philo->monitor, NULL, &meal_check, philo);
 	while (i < philo->count)
 	{
 		waitpid(-1, &status, 0);
-		if (status != 0 || status != SIGKILL)
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+
 		{
 			i = -1;
-			while (++i < philo->count)
-				kill(pid[i], SIGKILL);
+			if (philo->dine_count == -1)
+				while (++i < philo->count)
+					kill(pid[i], SIGKILL);
+			else
+				while (++i < philo->count)
+				{
+					printf("Thread %d: posting to semaphore from exit\n", i);
+					sem_post(philo->dine_lock);
+				}
 			break ;
 		}
 		i++;
 	}
-	if (philo->dine_count != -1 && pthread_join(philo->monitor, NULL))
+	if (pthread_join(philo->monitor, NULL))
 		print_error("Error: Failed to join the thread");
 	ft_sem_close(philo, 3);
-	free(philo);
 }
 
 int	main(int argc, char **argv)
 {
-	t_ph	*philo;
+	t_ph	philo;
 	int		i;
 
-	philo = init_philo(argc, argv);
+	init_philo(argc, argv, &philo);
 	i = -1;
-	philo->start_time = get_current_time();
-	while (++i < philo->count)
+	philo.start_time = get_current_time();
+	while (++i < philo.count)
 	{
-		philo->pid[i] = fork();
-		if (philo->pid[i] == -1)
+		philo.pid[i] = fork();
+		if (philo.pid[i] == -1)
 			print_error("Error creating fork\n");
-		if (philo->pid[i] == 0)
+		if (philo.pid[i] == 0)
 		{
-			philo->id = i + 1;
-			philo->last_meal = get_current_time();
-			dinner (philo);
+			philo.id = i + 1;
+			philo.last_meal = get_current_time();
+			dinner (&philo);
 		}
 	}
-	exit_philo(philo, philo->pid);
+	exit_philo(&philo, philo.pid);
 	return (0);
 }
