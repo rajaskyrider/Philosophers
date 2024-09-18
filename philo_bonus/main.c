@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:50:00 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/18 11:34:48 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:12:39 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,7 @@ void	check_monitor(t_ph	*philo)
 	if (get_current_time() - philo->last_meal >= philo->time_to_die)
 	{
 		philo->dead = 1;
-		dprintf(2, "\033[31mWaiting for write lock in check monitor\n\033[0m\n");
 		sem_wait(philo->write_lock);
-		dprintf(2, "\033[31mRecieved write lock in check_monitor\n\033[0m\n");
 		printf("%zu %d died\n", get_current_time()
 			- philo->start_time, philo->id);
 		philo->stop = 1;
@@ -56,50 +54,28 @@ void	dinner(t_ph *philo)
 {
 	if (philo->id % 2 == 0)
 		usleep(1000);
-	while (philo->ate < philo->dine_count)
+	while (TRUE)
 	{
 		print_status(philo->id, "is thinking", philo);
 		if (philo->count == 1)
-		{
-			dprintf(2, "\033[31mWaiting for forks in dinner\n\033[0m\n");
-			sem_wait(philo->forks);
-			dprintf(2, "\033[31mRecieved forks in dinner\n\033[0m\n");
-			print_status(philo->id, "has taken a fork", philo);
-			ft_usleep(philo->time_to_die, philo);
-			dprintf(2, "\033[31mPosting forks in dinner\n\033[0m\n");
-			sem_post(philo->forks);
-			//dprintf(2,"\033[31mPosting fork from dinner(1) \033[0m\n");
-			//print_status(philo->id, "checking monitor", philo);
-			check_monitor(philo);
-			print_status(philo->id, "Done monitor", philo);
-		}
-		dprintf(2, "\033[31mWaiting for max eater dinner\n\033[0m\n");
+			deal_one(philo);
 		sem_wait(philo->max_eater);
-		dprintf(2, "\033[31mRecieved max eater in dinner\n\033[0m\n");
-		dprintf(2, "\033[31mWaiting for forks in dinner\n\033[0m\n");
+		dprintf(2, "%d has entered %d\n", philo->id, philo->count);
 		sem_wait(philo->forks);
-		dprintf(2, "\033[31mRecieved forks in dinner\n\033[0m\n");
 		print_status(philo->id, "has taken a fork", philo);
 		check_monitor(philo);
-		dprintf(2, "\033[31mWaiting for forks in dinner\n\033[0m\n");
 		sem_wait(philo->forks);
-		dprintf(2, "\033[31mRecieved forks in dinner\n\033[0m\n");
 		print_status(philo->id, "has taken a fork", philo);
+		check_monitor(philo);
 		print_status(philo->id, "is eating", philo);
 		philo->last_meal = get_current_time();
 		ft_usleep(philo->time_to_eat, philo);
-		dprintf(2, "\033[31mPosting forks in dinner\n\033[0m\n");
 		sem_post(philo->forks);
-		dprintf(2, "\033[31mPosting forks in dinner\n\033[0m\n");
 		sem_post(philo->forks);
-		dprintf(2, "\033[31mPosting max_eater in dinner\n\033[0m\n");
 		sem_post(philo->max_eater);
+		dprintf(2, "%d has left %d\n", philo->id, philo->count);
 		if (++(philo->ate) == philo->dine_count)
-		{
-			printf("Thread %d: posting to semaphore from dinner\n", philo->id);
-			dprintf(2, "\033[31mPosting dine lock in dinner\n\033[0m\n");
 			sem_post(philo->dine_lock);
-		}
 		print_status(philo->id, "is sleeping", philo);
 		ft_usleep(philo->time_to_sleep, philo);
 	}
@@ -109,9 +85,17 @@ void	exit_philo(t_ph *philo, int	*pid)
 {
 	int	i;
 	int	status;
+	int	m_pid;
 
 	i = 0;
-	pthread_create(&philo->monitor, NULL, &meal_check, philo);
+	m_pid = fork();
+	if (m_pid == -1)
+		print_error("Error creating fork\n");
+	if (m_pid == 0)
+	{
+		meal_check(philo);
+		exit (0);
+	}
 	while (i < philo->count)
 	{
 		waitpid(-1, &status, 0);
@@ -124,17 +108,12 @@ void	exit_philo(t_ph *philo, int	*pid)
 					kill(pid[i], SIGKILL);
 			else
 				while (++i < philo->count)
-				{
-					printf("Thread %d: posting to semaphore from exit\n", i);
-					dprintf(2, "\033[31mPosting dine lock in dinner\n\033[0m\n");
 					sem_post(philo->dine_lock);
-				}
 			break ;
 		}
 		i++;
 	}
-	if (pthread_join(philo->monitor, NULL))
-		print_error("Error: Failed to join the thread");
+	waitpid(m_pid, NULL, 0);
 	ft_sem_close(philo, 3);
 }
 

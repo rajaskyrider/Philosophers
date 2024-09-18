@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 23:56:32 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/18 11:24:47 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:01:14 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,9 @@ void	print_status(int id, char *str, t_ph *philo)
 	size_t	time;
 
 	time = get_current_time() - philo->start_time;
-	dprintf(2, "\033[31mWaiting for write lock in print\n\033[0m\n");
 	sem_wait(philo->write_lock);
-	dprintf(2, "\033[31mRecieved write lock in print\n\033[0m\n");
 	if (!philo->stop)
 		printf("%zu %d %s\n", time, id, str);
-	dprintf(2, "\033[31mPosting write lock in print\n\033[0m\n");
 	sem_post(philo->write_lock);
 }
 
@@ -74,7 +71,7 @@ void	ft_usleep(size_t ms, t_ph *philo)
 	end = start + ms;
 	while (get_current_time() < end)
 	{
-		//check_monitor(philo);
+		check_monitor(philo);
 		usleep(200);
 	}
 }

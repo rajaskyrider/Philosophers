@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rpandipe <rpandie@student.42luxembourg.    +#+  +:+       +#+         #
+#    By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 13:53:39 by rpandipe          #+#    #+#              #
-#    Updated: 2024/09/09 11:01:02 by rpandipe         ###   ########.fr        #
+#    Updated: 2024/09/18 13:05:14 by rpandipe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC			= cc
 CFLAG		= -Wall -Werror -Wextra  -pthread -g -O3
 RM 			= rm -rf
 #SANITIZER 	= -fsanitize=thread
-PHILO		= main.c utils.c init.c monitor.c
+PHILO		= main.c utils.c init.c monitor.c utils2.c
 SRCS		= $(PHILO)
 OBJDIR      = objs
 OBJS		= $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
