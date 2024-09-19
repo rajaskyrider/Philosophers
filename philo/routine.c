@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 11:09:03 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/18 12:56:28 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:32:02 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,7 @@ void	sleepy(t_ph *philo)
 
 void	eat(t_ph *philo)
 {
-	pthread_mutex_t	*first_fork;
-	pthread_mutex_t	*second_fork;
-
-	set_order(&first_fork, &second_fork, philo);
-	pthread_mutex_lock(first_fork);
+	pthread_mutex_lock(philo->rfork);
 	print_status(philo->id, "has taken a fork", philo);
 	if (philo->count == 1)
 	{
@@ -49,7 +45,7 @@ void	eat(t_ph *philo)
 		pthread_mutex_unlock(philo->rfork);
 		return ;
 	}
-	pthread_mutex_lock(second_fork);
+	pthread_mutex_lock(philo->lfork);
 	print_status(philo->id, "has taken a fork", philo);
 	philo->eating = 1;
 	print_status(philo->id, "is eating", philo);
@@ -59,8 +55,8 @@ void	eat(t_ph *philo)
 	pthread_mutex_unlock(philo->meal_lock);
 	ft_usleep(philo->time_to_eat, philo);
 	philo->eating = 0;
-	pthread_mutex_unlock(first_fork);
-	pthread_mutex_unlock(second_fork);
+	pthread_mutex_unlock(philo->rfork);
+	pthread_mutex_unlock(philo->lfork);
 }
 
 void	*routine(void *ptr)

@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:50:00 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/18 13:12:39 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:27:28 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,25 @@ void	check_monitor(t_ph	*philo)
 
 void	dinner(t_ph *philo)
 {
-	if (philo->id % 2 == 0)
-		usleep(1000);
+	usleep((philo->id % philo->count) * 1000);
 	while (TRUE)
 	{
 		print_status(philo->id, "is thinking", philo);
 		if (philo->count == 1)
 			deal_one(philo);
 		sem_wait(philo->max_eater);
-		dprintf(2, "%d has entered %d\n", philo->id, philo->count);
 		sem_wait(philo->forks);
 		print_status(philo->id, "has taken a fork", philo);
 		check_monitor(philo);
 		sem_wait(philo->forks);
 		print_status(philo->id, "has taken a fork", philo);
+		sem_post(philo->max_eater);
 		check_monitor(philo);
 		print_status(philo->id, "is eating", philo);
 		philo->last_meal = get_current_time();
 		ft_usleep(philo->time_to_eat, philo);
 		sem_post(philo->forks);
 		sem_post(philo->forks);
-		sem_post(philo->max_eater);
-		dprintf(2, "%d has left %d\n", philo->id, philo->count);
 		if (++(philo->ate) == philo->dine_count)
 			sem_post(philo->dine_lock);
 		print_status(philo->id, "is sleeping", philo);
@@ -88,19 +85,11 @@ void	exit_philo(t_ph *philo, int	*pid)
 	int	m_pid;
 
 	i = 0;
-	m_pid = fork();
-	if (m_pid == -1)
-		print_error("Error creating fork\n");
-	if (m_pid == 0)
-	{
-		meal_check(philo);
-		exit (0);
-	}
+	m_pid = create_monitor(philo);
 	while (i < philo->count)
 	{
 		waitpid(-1, &status, 0);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-
 		{
 			i = -1;
 			if (philo->dine_count == -1)

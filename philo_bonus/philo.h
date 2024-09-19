@@ -6,7 +6,7 @@
 /*   By: rpandipe <rpandipe.student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:51:08 by rpandipe          #+#    #+#             */
-/*   Updated: 2024/09/18 13:04:58 by rpandipe         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:26:43 by rpandipe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ void	ft_usleep(size_t ms, t_ph *philo);
 size_t	get_current_time(void);
 void	*meal_check(void *ptr);
 void	deal_one(t_ph *philo);
+int		create_monitor(t_ph *philo);
 
 #endif
